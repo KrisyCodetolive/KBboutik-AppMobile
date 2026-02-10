@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // pour formater la date
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../sheets/productDetailsSheet.dart';
+
 class ProductCard extends StatelessWidget {
   final Map<String, dynamic> product;
 
@@ -24,7 +26,14 @@ class ProductCard extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        // Ici tu peux ouvrir un modal ou une page de détails
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          builder: (_) => ProductDetailsSheet(product: product),
+        );
       },
       child: Card(
         elevation: 3,

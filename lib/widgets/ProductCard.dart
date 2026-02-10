@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../sheets/editProductSheet.dart';
-import '../sheets/productDetailsSheet.dart';
+import 'package:intl/intl.dart'; // pour formater la date
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProductCard extends StatelessWidget {
   final Map<String, dynamic> product;
@@ -10,8 +9,23 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ✅ Gestion sécurisée des champs
+    final String name = product['nomProduit'] ?? 'Nom inconnu';
+    final int quantity = product['quantité'] ?? 0;
+    final String ProductUrl = product['productUrl'] ?? "------";
+
+    // Gestion du Timestamp Firestore
+    final Timestamp? timestamp = product['date'] as Timestamp?;
+    final String dateText = timestamp != null
+        ? DateFormat('dd/MM/yyyy – HH:mm').format(timestamp.toDate())
+        : 'Pas de date';
+
+    final String mediaUrl = product['mediaUrl'] ?? '';
+
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        // Ici tu peux ouvrir un modal ou une page de détails
+      },
       child: Card(
         elevation: 3,
         margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -22,6 +36,7 @@ class ProductCard extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           child: Row(
             children: [
+              // Image ou icône fallback
               Container(
                 width: 70,
                 height: 70,
@@ -29,7 +44,17 @@ class ProductCard extends StatelessWidget {
                   color: Colors.grey[300],
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.image),
+                child: mediaUrl.isNotEmpty
+                    ? ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    mediaUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) =>
+                    const Icon(Icons.broken_image),
+                  ),
+                )
+                    : const Icon(Icons.image),
               ),
 
               const SizedBox(width: 12),
@@ -38,11 +63,12 @@ class ProductCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Nom et quantité
                     Row(
                       children: [
                         Expanded(
                           child: Text(
-                            product['name'],
+                            name,
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -57,7 +83,7 @@ class ProductCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
-                            '${product['quantity']}',
+                            '$quantity',
                             style: const TextStyle(color: Colors.white),
                           ),
                         ),
@@ -66,13 +92,15 @@ class ProductCard extends StatelessWidget {
 
                     const SizedBox(height: 6),
 
+                    // Date
                     Text(
-                      product['date'],
+                      dateText,
                       style: const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
 
+                    // Media URL affiché (texte cliquable si besoin)
                     Text(
-                      product['url'],
+                      ProductUrl,
                       style: const TextStyle(fontSize: 12, color: Colors.blue),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -86,4 +114,3 @@ class ProductCard extends StatelessWidget {
     );
   }
 }
-

@@ -2,18 +2,42 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-Future<String?> uploadMedia(File file, String filename, BuildContext context) async {
-  try {
-    await Supabase.instance.client.storage
-        .from('media')
-        .upload(filename, file, fileOptions: const FileOptions(upsert: true));
+const directory = "product-media";
 
-    final url = Supabase.instance.client.storage.from('media').getPublicUrl(filename);
-    return url;
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Erreur upload: $e')),
+Future<String> uploadMedia(
+    File file,
+    String filename,
+    BuildContext context,
+    ) async {
+  try {
+    final filePath = 'products/$filename';
+
+    await Supabase.instance.client.storage
+        .from(directory)
+        .upload(
+      filePath,
+      file,
+      fileOptions: const FileOptions(
+        cacheControl: '3600',
+        upsert: true,
+      ),
     );
-    return null;
+
+    final publicUrl = Supabase.instance.client.storage
+        .from(directory)
+        .getPublicUrl(filePath);
+
+    debugPrint('✅ Media uploaded: $publicUrl');
+
+    return publicUrl;
+  } on StorageException catch (e) {
+    debugPrint('❌ Supabase upload error: ${e.message}');
+    throw Exception('Échec de l’upload du média vers Supabase');
+  } catch (e) {
+    debugPrint('❌ Upload error: $e');
+    throw Exception('Erreur inconnue lors de l’upload');
   }
 }
+
+
+

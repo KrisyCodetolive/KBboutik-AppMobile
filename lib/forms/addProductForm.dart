@@ -166,6 +166,7 @@ class _AddProductFormState extends State<AddProductForm> {
                   descriptionController,
                   quantityController,
                   priceController,
+                    selectedFile,
                   context
                 );
 

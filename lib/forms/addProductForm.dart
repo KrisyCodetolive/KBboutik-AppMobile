@@ -64,18 +64,51 @@ class _AddProductFormState extends State<AddProductForm> {
 
             const SizedBox(height: 20),
 
-            OutlinedButton.icon(
-              onPressed: () async {
-                final picker = ImagePicker();
-                final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
-                if (pickedFile != null) {
-                  setState(() {
-                    selectedFile = File(pickedFile.path);
-                  });
-                }
-              },
-              icon: const Icon(Icons.upload),
-              label: const Text('Choisir photo / vidéo'),
+            Column(
+              children: [
+                // Bouton pour choisir le media
+                OutlinedButton.icon(
+                  onPressed: () async {
+                    final picker = ImagePicker();
+                    // Permet à l'utilisateur de choisir une image ou une vidéo
+                    final XFile? pickedFile = await picker.pickImage(
+                      source: ImageSource.gallery,
+                    );
+
+                    if (pickedFile != null) {
+                      setState(() {
+                        selectedFile = File(pickedFile.path);
+                      });
+                    }
+                  },
+                  icon: const Icon(Icons.upload),
+                  label: const Text('Choisir photo / vidéo'),
+                ),
+
+                const SizedBox(height: 16), // un petit espace
+
+                // Indicateur visuel du fichier sélectionné
+                if (selectedFile != null)
+                  selectedFile!.path.endsWith('.mp4') // si c'est une vidéo
+                      ? Row(
+                    children: [
+                      const Icon(Icons.videocam, color: Colors.red),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          selectedFile!.path.split('/').last, // nom du fichier
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  )
+                      : Image.file(
+                    selectedFile!,
+                    width: 150,
+                    height: 150,
+                    fit: BoxFit.cover,
+                  ),
+              ],
             ),
 
             const SizedBox(height: 12),

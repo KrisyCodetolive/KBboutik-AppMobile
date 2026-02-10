@@ -24,7 +24,7 @@ Future<void> addProductToFirestore(
       'description': descriptionController.text,
       'quantité': int.tryParse(quantityController.text) ?? 0,
       'prix': priceController.text,
-      'url': 'kbboutik.versel.app?id=$productCounter',
+      'url': '',
       'cover': "chemin/vers/image",
       'spProduit': ["couleur", "rouge", "vert", "orange"],
       'date': DateTime.now(),
@@ -35,6 +35,7 @@ Future<void> addProductToFirestore(
     await docRef.update({
       'url': 'https://kbboutik.vercel.app?productId=$idProduit'
     });
+
 
     // 🔹 Ferme le loader
     Navigator.of(context).pop();

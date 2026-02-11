@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../utils/editById.dart';
+import '../widgets/QuantitySelector.dart';
 
 class EditProductSheet extends StatefulWidget {
   final Map<String, dynamic> product;
@@ -74,13 +75,11 @@ class _EditProductSheetState extends State<EditProductSheet> {
 
             const SizedBox(height: 12),
 
-            TextField(
-              controller: quantityController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Quantité',
-                border: OutlineInputBorder(),
-              ),
+            QuantitySelector(
+              initialQuantity: int.tryParse(quantityController.text) ?? 1,
+              onChanged: (val) {
+                quantityController.text = val.toString();
+              },
             ),
 
             const SizedBox(height: 20),

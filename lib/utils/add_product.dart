@@ -4,6 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:kbboutik_v04/utils/supabase_storage.dart';
 
+
+const UrlBase = "https://kbboutikappweb-d1zq.vercel.app/products/";
+
 Future<void> addProductToFirestore(
     int productCounter,
     TextEditingController nameController,
@@ -55,7 +58,7 @@ Future<void> addProductToFirestore(
         .add(product);
 
     final productUrl =
-        'https://kbboutik.vercel.app?productId=${docRef.id}';
+        '$UrlBase${docRef.id}';
 
     await docRef.update({
       'productUrl': productUrl,

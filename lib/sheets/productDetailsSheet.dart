@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../pages/webwiewsPage.dart';
 
 class ProductDetailsSheet extends StatelessWidget {
   final Map<String, dynamic> product;
@@ -21,6 +24,33 @@ class ProductDetailsSheet extends StatelessWidget {
     final String dateText = timestamp != null
         ? DateFormat('dd/MM/yyyy à HH:mm').format(timestamp.toDate())
         : '';
+
+    /// 📋 Copier l’URL
+    void openInAppWebView(BuildContext context, String url) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => WebViewPage(url: url),
+        ),
+      );
+    }
+    /// 📋 Copier l’URL
+    void copyUrl(String url) {
+      Clipboard.setData(ClipboardData(text: url));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Lien copié 📋")),
+      );
+    }
+
+    /// 🌍 Ouvrir l’URL
+    Future<void> openUrl(String url) async {
+      final uri = Uri.parse(url);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      }
+    }
+
+    final bool isValidUrl = productUrl.startsWith('https');
 
     return Padding(
       padding: EdgeInsets.only(
@@ -88,7 +118,7 @@ class ProductDetailsSheet extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Prix : ${price} FCFA',
+                  'Prix : $price FCFA',
                   style: const TextStyle(fontSize: 16),
                 ),
                 Chip(
@@ -110,23 +140,25 @@ class ProductDetailsSheet extends StatelessWidget {
 
             const SizedBox(height: 12),
 
-            /// 🔗 URL cliquable
+            /// 🔗 URL sélectionnable / cliquable
             if (productUrl.isNotEmpty)
-              InkWell(
-                onTap: () async {
-                  final uri = Uri.parse(productUrl);
-                  if (await canLaunchUrl(uri)) {
-                    await launchUrl(uri, mode: LaunchMode.externalApplication);
-                  }
-                },
-                child: Text(
+              GestureDetector(
+                onTap: isValidUrl
+                    ? () => openInAppWebView(context, productUrl)
+                    : null,
+                onLongPress: isValidUrl
+                    ? () => copyUrl(productUrl)
+                    : null,
+                child: SelectableText(
                   productUrl,
-                  style: const TextStyle(
-                    color: Colors.blue,
-                    decoration: TextDecoration.underline,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: isValidUrl ? Colors.blue : Colors.grey,
+                    decoration: isValidUrl ? TextDecoration.underline : null,
                   ),
                 ),
               ),
+
 
             const SizedBox(height: 12),
 

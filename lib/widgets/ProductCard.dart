@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../sheets/editProductSheet.dart';
 import '../sheets/productDetailsSheet.dart';
 
 class ProductCard extends StatelessWidget {
@@ -101,6 +102,21 @@ class ProductCard extends StatelessWidget {
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.edit, color: Colors.grey),
+                          onPressed: () {
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20),
+                                ),
+                              ),
+                              builder: (_) => EditProductSheet(product: product),
+                            );
+                          },
                         ),
                         Container(
                           padding: const EdgeInsets.symmetric(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:kbboutik_v04/utils/deleteProduit.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../pages/webwiewsPage.dart';
@@ -19,6 +20,7 @@ class ProductDetailsSheet extends StatelessWidget {
     final String price = product['prix'] ?? "non précisé";
     final String mediaUrl = product['mediaUrl'] ?? '';
     final String productUrl = product['productUrl'] ?? '';
+    final String productId = product['id'] ?? '';
 
     final Timestamp? timestamp = product['date'] as Timestamp?;
     final String dateText = timestamp != null
@@ -170,6 +172,14 @@ class ProductDetailsSheet extends StatelessWidget {
               ),
 
             const SizedBox(height: 20),
+            ElevatedButton(
+                onPressed: ()=> {
+
+                  deleteProduit(context, productId, mediaUrl)
+                },
+                child: const Text('Supprimer' , style: const TextStyle(color: Colors.red),)),
+
+            const SizedBox(height: 20)
           ],
         ),
       ),

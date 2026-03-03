@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:kbboutik_v04/pages/productPage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'toggleBarr.dart';
 import 'firebase_options.dart'; // généré par flutterfire configure
 
 
@@ -25,8 +26,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Gestion de produits',
-      home: ProductPage(),
+      home: const Togglebarr(),
     );
   }
 }

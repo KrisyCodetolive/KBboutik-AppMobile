@@ -17,9 +17,9 @@ class _DashboardPageState extends State<Togglebarr> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = const [
-    ProductPage(),
     OrderPage(),
     DeliveryPage(),
+    ProductPage(),
     StatsPage(),
   ];
 
@@ -40,16 +40,16 @@ class _DashboardPageState extends State<Togglebarr> {
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.inventory),
-            label: "Produits",
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.receipt_long),
             label: "Commandes",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.local_shipping),
             label: "Livraison",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.inventory),
+            label: "Produits",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.bar_chart),

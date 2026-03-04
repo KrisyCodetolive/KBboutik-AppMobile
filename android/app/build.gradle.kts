@@ -1,44 +1,33 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    // Le plugin Flutter doit être appliqué après Android et Kotlin
     id("dev.flutter.flutter-gradle-plugin")
 }
 
 android {
-    // Ton identifiant unique
     namespace = "com.example.kbboutik_v04"
-
-    // Forcer le SDK de compilation à 34 pour la compatibilité plugins
     compileSdk = 36
 
-    ndkVersion = flutter.ndkVersion
+    defaultConfig {
+        applicationId = "com.example.kbboutik_v04"
+        minSdk = flutter.minSdkVersion // généralement 21+
+        targetSdk = 36
+        versionCode = 1
+        versionName = "1.0"
+    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled = true // pour certaines libs modernes
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-
-    defaultConfig {
-        applicationId = "com.example.kbboutik_v04"
-
-        // sign_in_with_apple nécessite au minimum minSdk 21
-        minSdk = flutter.minSdkVersion
-
-        // On cible la version 34 (Android 14)
-        targetSdk = 34
-
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+        jvmTarget = "17"
     }
 
     buildTypes {
         release {
-            // Configuration de signature pour le mode release
             signingConfig = signingConfigs.getByName("debug")
         }
     }
@@ -46,4 +35,26 @@ android {
 
 flutter {
     source = "../.."
+}
+
+// 🔹 Repositories
+repositories {
+    google()
+    mavenCentral()
+}
+
+// 🔹 Dépendances
+dependencies {
+    // Kotlin standard
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.10")
+
+    // 🔹 Core library desugaring
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+
+    // 🔹 Firebase BOM
+    implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
+
+    // 🔹 Firebase KTX libs
+    implementation("com.google.firebase:firebase-messaging-ktx")
+    implementation("com.google.firebase:firebase-analytics-ktx")
 }

@@ -34,12 +34,12 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String lieu = order['lieu'] ?? "Lieu inconnu";
-    final int nombreProduits = order['nombreProduits'] ?? 0;
-    final int total = order['total'] ?? 0;
+    final String lieu = order['lieuLivraison'] ?? "Lieu inconnu";
+    final String nombreProduits = order['quantité'] ?? 0;
+    final int total = order['prix'] ?? 0;
     final String status = order['status'] ?? "en attente";
 
-    final Timestamp? timestamp = order['date'] as Timestamp?;
+    final Timestamp? timestamp = order['createdAt'] as Timestamp?;
     final String dateText = timestamp != null
         ? DateFormat('dd/MM/yyyy – HH:mm').format(timestamp.toDate())
         : 'Pas de date';

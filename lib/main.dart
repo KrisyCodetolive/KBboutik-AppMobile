@@ -3,7 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:kbboutik_v04/pages/productPage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'toggleBarr.dart';
-import 'firebase_options.dart'; // généré par flutterfire configure
+import 'firebase_options.dart';
+import 'notifications/notification_service.dart';// généré par flutterfire configure
 
 
 void main() async{
@@ -18,6 +19,7 @@ void main() async{
     anonKey: 'sb_publishable_3QaAZ4-a1S5fEt60czYOCw_VpWbMgVc',            // ta clé anon
   );
   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService().init();
   await Firebase.initializeApp();
   runApp(MyApp());
 }
